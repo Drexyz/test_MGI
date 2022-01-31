@@ -1,5 +1,11 @@
 .container {
-  padding: 0 2rem;
+  background: #FFA69E;
+  width: 100vw;
+  min-height: 100vh;
+  height: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .main {
@@ -74,22 +80,20 @@
 }
 
 .card {
-  margin: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto 1rem;
   padding: 1.5rem;
   text-align: left;
   color: inherit;
   text-decoration: none;
   border: 1px solid #eaeaea;
   border-radius: 10px;
+  background: #DDFFF7;
+  width: 85vw;
+  height: 90vh;
   transition: color 0.15s ease, border-color 0.15s ease;
-  max-width: 300px;
-}
-
-.card:hover,
-.card:focus,
-.card:active {
-  color: #0070f3;
-  border-color: #0070f3;
 }
 
 .card h2 {
