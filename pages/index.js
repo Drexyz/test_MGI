@@ -52,7 +52,7 @@ export default function Home({ users }) {
     getDataPage()
   }, [usersData])
   useEffect(() => {
-    if (currentPage !== 1) {
+    if (currentPage > totalPage) {
       setCurrentPage(currentPage-1)
     }
   }, [totalPage])
