@@ -6,7 +6,7 @@ const Layout = ({children}) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Synapsis Challenge</title>
+        <title>MGI Test</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Nav />

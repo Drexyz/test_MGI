@@ -11,7 +11,7 @@ const Nav = () => {
           </Link>
         </li>
         <li>
-          <Link href='/add_person'><img src="/add.png" className={styles.addIcon} /></Link>
+          <Link href='/favorite'><img src="/fav.png" className={styles.addIcon} /></Link>
         </li>
       </ul>
     </nav>

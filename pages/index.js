@@ -1,20 +1,19 @@
-import Link from 'next/link'
 import {useState, useEffect} from 'react'
-import styles from '../styles/Table.module.css'
+import Link from 'next/link'
+import styles from '../styles/Main.module.css'
 
 
-export default function Home({ users }) {
-  const [usersData, setUsersData] = useState(users);
-  const [totalPage, setTotalPage] = useState(1);
+export default function Home({photos}) {
+  const [photosData, setPhotosData] = useState(photos);
   const [currentPage, setCurrentPage] = useState(1);
   const [indexPage, setIndexPage] = useState([1]);
   const [dataPage, setDataPage] = useState([])
-  const postsPerPage = 8;
+  const postsPerPage = 12;
 
   const getTotalPage = () => {
     //get total page needed
-    const total = Math.ceil(usersData.length/postsPerPage)
-    setTotalPage(total)
+    const total = Math.ceil(photosData.length/postsPerPage)
+    //setTotalPage(total)
 
     //make array of index page
     var countTotal = []
@@ -26,73 +25,35 @@ export default function Home({ users }) {
   }
 
   const getDataPage = () => {
-    const data = usersData.map(user => {return user})
+    const data = photosData.map(photo => {return photo})
     const dataArr = []
     //get data to display in a page
     while (data.length > 0)
       dataArr.push(data.splice(0, postsPerPage));
 
+    console.log(dataArr)
     setDataPage(dataArr);
-  }
-
-  const handleDelete = async (id) => {
-    try {
-      const deleted = await fetch(`http://localhost:3000/api/user/${id}`, {
-        method: 'DELETE'
-      })
-      setUsersData(usersData.filter(user => user._id !== id))
-    } catch (error) {
-      alert('error')
-      console.log(error)
-    }
   }
 
   useEffect(() => {
     getTotalPage()
     getDataPage()
-  }, [usersData])
-  useEffect(() => {
-    if (currentPage > totalPage) {
-      setCurrentPage(currentPage-1)
-    }
-  }, [totalPage])
-
+    console.log(dataPage)
+  }, [photosData])
 
   return (
-    <div className={styles.container}>
-      <h1>Data List</h1>
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>  
-              <th>Address</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dataPage[currentPage-1]?.map(user => {
-              return (
-                <tr key={user._id}>
-                  <td>{`${user.FirstName} ${user.LastName}`}</td>
-                  <td>{user.Email}</td>
-                  <td>{user.Phone}</td>
-                  <td>{user.Address}</td>
-                  <td>
-                    <div className={styles.buttons}>
-                      <Link href={`/edit/${user._id}`}>
-                        <button className={styles.edit}>Edit</button>
-                      </Link>
-                      <button className={styles.delete} onClick={() => handleDelete(user._id)}>Delete</button>
-                    </div>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+    <div className={styles.main}>
+      <div className={styles.container}>
+        {dataPage[currentPage-1]?.map(photo => {return (
+          <div className={styles.card}>
+            <Link href={`/${photo.id}`}>
+              <img src={photo.thumbnailUrl} className={styles.img}/>
+            </Link>
+            <Link href={`/${photo.id}`}>
+              <p>{photo.title.length <= 15 ? (photo.title) : (photo.title.slice(0, 12) + '...') }</p>
+            </Link>
+          </div>  
+        )})}
       </div>
       <div className={styles.pageNavigators}>
         {indexPage.map(el => {
@@ -109,9 +70,9 @@ export default function Home({ users }) {
   )
 }
 
-Home.getInitialProps = async () => {
-  const res = await fetch('http://localhost:3000/api/users');
-  const { data } = await res.json();
+export async function getServerSideProps() {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/albums/1/photos`)
+  const photos = await res.json()
 
-  return { users: data }
+  return { props: { photos } }
 }
